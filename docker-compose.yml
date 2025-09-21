@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_planwise
+    environment:
+      POSTGRES_USER: planwise_user
+      POSTGRES_PASSWORD: planwise_pass
+      POSTGRES_DB: planwise_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - planwise_net
+
+volumes:
+  postgres_data:
+
+networks:
+  planwise_net:

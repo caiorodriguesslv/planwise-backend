@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: planwise
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/planwise_db
+    username: planwise123
+    password: planwise123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
+
+server:
+  port: 8080
