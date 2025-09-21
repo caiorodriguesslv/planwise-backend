@@ -1,18 +1,13 @@
 spring:
-  application:
-    name: planwise
-  profiles:
-    active: dev
-
   datasource:
-    url: jdbc:postgresql://postgres:5432/planwise_db
+    url: jdbc:postgresql://localhost:5432/planwise_db
     username: planwise_user
     password: planwise_pass
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -22,6 +17,7 @@ spring:
 server:
   port: 8080
 
-jwt:
-  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-  expiration: 86400000
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
