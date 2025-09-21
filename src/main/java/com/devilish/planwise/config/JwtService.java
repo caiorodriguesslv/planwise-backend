@@ -1,11 +1,12 @@
-package com.devilish.planwise.services;
+package com.devilish.planwise.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,16 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
-    private String secretKey;
+    @Autowired
+    private Dotenv dotenv;
 
-    @Value("${jwt.expiration:86400000}")
-    private long jwtExpiration;
+    private String getSecretKey() {
+        return dotenv.get("JWT_SECRET");
+    }
+
+    private long getJwtExpiration() {
+        return Long.parseLong(dotenv.get("JWT_EXPIRATION", "86400000"));
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -38,7 +44,7 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        return buildToken(extraClaims, userDetails, getJwtExpiration());
     }
 
     private String buildToken(
@@ -79,7 +85,7 @@ public class JwtService {
     }
 
     private javax.crypto.SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
