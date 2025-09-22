@@ -5,6 +5,7 @@ import com.devilish.planwise.dto.LoginRequest;
 import com.devilish.planwise.dto.RegisterRequest;
 import com.devilish.planwise.entities.User;
 import com.devilish.planwise.repository.UserRepository;
+import com.devilish.planwise.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
