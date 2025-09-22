@@ -36,13 +36,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setActive(true);
-        // Se for o primeiro usuário OU um email específico de admin, tornar ADMIN
-        long userCount = userRepository.count();
-        if (userCount == 0 || request.getEmail().equals("admin@planwise.dev") || request.getName().equalsIgnoreCase("admin")) {
-            user.setRole(User.Role.ADMIN);
-        } else {
-            user.setRole(User.Role.USER);
-        }
+        user.setRole(User.Role.USER);
 
         User savedUser = userRepository.save(user);
 

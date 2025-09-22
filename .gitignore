@@ -43,3 +43,6 @@ build/
 *.pem
 *.p12
 *.jks
+
+### Stop Server ###
+stop-app.sh
