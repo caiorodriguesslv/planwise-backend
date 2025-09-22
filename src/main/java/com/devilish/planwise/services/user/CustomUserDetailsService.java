@@ -1,7 +1,7 @@
-package com.devilish.planwise.services;
+package com.devilish.planwise.services.user;
 
 import com.devilish.planwise.entities.User;
-import com.devilish.planwise.repository.UserRepository;
+import com.devilish.planwise.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

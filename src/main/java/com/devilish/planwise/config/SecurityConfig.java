@@ -1,7 +1,7 @@
 package com.devilish.planwise.config;
 
 import com.devilish.planwise.config.JwtService;
-import com.devilish.planwise.services.CustomUserDetailsService;
+import com.devilish.planwise.services.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

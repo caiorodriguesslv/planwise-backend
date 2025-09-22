@@ -1,10 +1,10 @@
-package com.devilish.planwise.services;
+package com.devilish.planwise.services.user;
 
-import com.devilish.planwise.dto.PasswordChangeRequest;
-import com.devilish.planwise.dto.UserResponse;
-import com.devilish.planwise.dto.UserUpdateRequest;
+import com.devilish.planwise.dto.user.PasswordChangeRequest;
+import com.devilish.planwise.dto.user.UserResponse;
+import com.devilish.planwise.dto.user.UserUpdateRequest;
 import com.devilish.planwise.entities.User;
-import com.devilish.planwise.repository.UserRepository;
+import com.devilish.planwise.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -134,5 +134,12 @@ public class UserService {
         user.setRole(role);
         User savedUser = userRepository.save(user);
         return UserResponse.fromUser(savedUser);
+    }
+
+    public User getCurrentUserEntity() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 }

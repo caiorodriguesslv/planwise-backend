@@ -1,9 +1,9 @@
-package com.devilish.planwise.controllers;
+package com.devilish.planwise.controllers.auth;
 
-import com.devilish.planwise.dto.AuthResponse;
-import com.devilish.planwise.dto.LoginRequest;
-import com.devilish.planwise.dto.RegisterRequest;
-import com.devilish.planwise.services.AuthService;
+import com.devilish.planwise.dto.auth.AuthResponse;
+import com.devilish.planwise.dto.auth.LoginRequest;
+import com.devilish.planwise.dto.auth.RegisterRequest;
+import com.devilish.planwise.services.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

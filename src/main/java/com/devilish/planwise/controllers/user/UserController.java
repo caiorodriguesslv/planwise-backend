@@ -1,10 +1,10 @@
-package com.devilish.planwise.controllers;
+package com.devilish.planwise.controllers.user;
 
-import com.devilish.planwise.dto.PasswordChangeRequest;
-import com.devilish.planwise.dto.UserResponse;
-import com.devilish.planwise.dto.UserUpdateRequest;
+import com.devilish.planwise.dto.user.PasswordChangeRequest;
+import com.devilish.planwise.dto.user.UserResponse;
+import com.devilish.planwise.dto.user.UserUpdateRequest;
 import com.devilish.planwise.entities.User;
-import com.devilish.planwise.services.UserService;
+import com.devilish.planwise.services.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,10 @@
-package com.devilish.planwise.services;
+package com.devilish.planwise.services.auth;
 
-import com.devilish.planwise.dto.AuthResponse;
-import com.devilish.planwise.dto.LoginRequest;
-import com.devilish.planwise.dto.RegisterRequest;
+import com.devilish.planwise.dto.auth.AuthResponse;
+import com.devilish.planwise.dto.auth.LoginRequest;
+import com.devilish.planwise.dto.auth.RegisterRequest;
 import com.devilish.planwise.entities.User;
-import com.devilish.planwise.repository.UserRepository;
+import com.devilish.planwise.repository.user.UserRepository;
 import com.devilish.planwise.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

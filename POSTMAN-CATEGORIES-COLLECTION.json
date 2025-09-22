@@ -1,0 +1,204 @@
+{
+  "info": {
+    "name": "Planwise - Categorias",
+    "description": "Collection para testes de categorias do Planwise",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Criar Categoria - Receita",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Salário\",\n  \"type\": \"RECEITA\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/categories",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories"]
+        }
+      }
+    },
+    {
+      "name": "Criar Categoria - Despesa",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alimentação\",\n  \"type\": \"DESPESA\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/categories",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories"]
+        }
+      }
+    },
+    {
+      "name": "Listar Todas as Categorias",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/categories",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories"]
+        }
+      }
+    },
+    {
+      "name": "Listar Categorias por Tipo - Receita",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/categories/type/RECEITA",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories", "type", "RECEITA"]
+        }
+      }
+    },
+    {
+      "name": "Listar Categorias por Tipo - Despesa",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/categories/type/DESPESA",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories", "type", "DESPESA"]
+        }
+      }
+    },
+    {
+      "name": "Buscar Categoria por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/categories/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories", "1"]
+        }
+      }
+    },
+    {
+      "name": "Atualizar Categoria",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Salário Mensal\",\n  \"type\": \"RECEITA\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/categories/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories", "1"]
+        }
+      }
+    },
+    {
+      "name": "Buscar Categorias por Texto",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/categories/search?search=sal",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories", "search"],
+          "query": [
+            {
+              "key": "search",
+              "value": "sal"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Deletar Categoria",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/categories/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "categories", "1"]
+        }
+      }
+    }
+  ]
+}
