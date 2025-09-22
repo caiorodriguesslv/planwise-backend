@@ -1,4 +1,4 @@
-package com.devilish.planwise.repository;
+package com.devilish.planwise.repository.income;
 
 import com.devilish.planwise.entities.Income;
 import org.springframework.data.domain.Page;
@@ -16,15 +16,15 @@ import java.util.Optional;
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long> {
     
-    Page<Income> findByUserAndActiveTrueOrderByDateDesc(Long userId, Pageable pageable);
+    Page<Income> findByUserIdAndActiveTrueOrderByDateDesc(Long userId, Pageable pageable);
+
+    List<Income> findByUserIdAndActiveTrueOrderByDateDesc(Long userId);
+
+    List<Income> findByUserIdAndCategoryIdAndActiveTrueOrderByDateDesc(Long userId, Long categoryId);
+
+    List<Income> findByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
     
-    List<Income> findByUserAndActiveTrueOrderByDateDesc(Long userId);
-    
-    List<Income> findByUserAndCategoryAndActiveTrueOrderByDateDesc(Long userId, Long categoryId);
-    
-    List<Income> findByUserAndDateBetweenAndActiveTrueOrderByDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
-    
-    Optional<Income> findByIdAndUserAndActiveTrue(Long id, Long userId);
+    Optional<Income> findByIdAndUserIdAndActiveTrue(Long id, Long userId);
     
     @Query("SELECT SUM(i.value) FROM Income i WHERE i.user.id = :userId AND i.active = true")
     BigDecimal getTotalIncomeByUser(@Param("userId") Long userId);
@@ -40,7 +40,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
     List<Income> findByUserAndDescriptionContainingIgnoreCaseAndActiveTrue(@Param("userId") Long userId, 
                                                                            @Param("search") String search);
     
-    long countByUserAndActiveTrue(Long userId);
+    long countByUserIdAndActiveTrue(Long userId);
     
-    long countByUserAndDateBetweenAndActiveTrue(Long userId, LocalDate startDate, LocalDate endDate);
+    long countByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
 }

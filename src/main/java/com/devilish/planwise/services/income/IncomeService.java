@@ -33,7 +33,7 @@ public class IncomeService {
         User currentUser = userService.getCurrentUserEntity();
         
         // Verificar se a categoria existe e pertence ao usuário
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(request.getCategoryId(), currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(request.getCategoryId(), currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         // Verificar se a categoria é do tipo RECEITA
@@ -56,13 +56,13 @@ public class IncomeService {
 
     public Page<IncomeResponse> getAllIncomes(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
-        Page<Income> incomes = incomeRepository.findByUserAndActiveTrueOrderByDateDesc(currentUser.getId(), pageable);
+        Page<Income> incomes = incomeRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId(), pageable);
         return incomes.map(IncomeResponse::fromIncome);
     }
 
     public List<IncomeResponse> getAllIncomes() {
         User currentUser = userService.getCurrentUserEntity();
-        List<Income> incomes = incomeRepository.findByUserAndActiveTrueOrderByDateDesc(currentUser.getId());
+        List<Income> incomes = incomeRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId());
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
@@ -70,7 +70,7 @@ public class IncomeService {
 
     public List<IncomeResponse> getIncomesByCategory(Long categoryId) {
         User currentUser = userService.getCurrentUserEntity();
-        List<Income> incomes = incomeRepository.findByUserAndCategoryAndActiveTrueOrderByDateDesc(currentUser.getId(), categoryId);
+        List<Income> incomes = incomeRepository.findByUserIdAndCategoryIdAndActiveTrueOrderByDateDesc(currentUser.getId(), categoryId);
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class IncomeService {
 
     public List<IncomeResponse> getIncomesByDateRange(LocalDate startDate, LocalDate endDate) {
         User currentUser = userService.getCurrentUserEntity();
-        List<Income> incomes = incomeRepository.findByUserAndDateBetweenAndActiveTrueOrderByDateDesc(currentUser.getId(), startDate, endDate);
+        List<Income> incomes = incomeRepository.findByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(currentUser.getId(), startDate, endDate);
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class IncomeService {
 
     public IncomeResponse getIncomeById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Income income = incomeRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Income income = incomeRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
         return IncomeResponse.fromIncome(income);
     }
@@ -94,11 +94,11 @@ public class IncomeService {
     @Transactional
     public IncomeResponse updateIncome(Long id, IncomeRequest request) {
         User currentUser = userService.getCurrentUserEntity();
-        Income income = incomeRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Income income = incomeRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
 
         // Verificar se a categoria existe e pertence ao usuário
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(request.getCategoryId(), currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(request.getCategoryId(), currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         // Verificar se a categoria é do tipo RECEITA
@@ -118,7 +118,7 @@ public class IncomeService {
     @Transactional
     public void deleteIncome(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Income income = incomeRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Income income = incomeRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
 
         // Soft delete

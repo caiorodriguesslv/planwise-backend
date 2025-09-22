@@ -34,7 +34,7 @@ public class GoalResponse {
             goal.getStatus(),
             goal.getCreatedAt(),
             goal.getActive(),
-            goal.getProgressPercentage()
+            BigDecimal.valueOf(goal.getProgressPercentage())
         );
     }
 }

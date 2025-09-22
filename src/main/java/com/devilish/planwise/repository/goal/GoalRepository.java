@@ -1,4 +1,4 @@
-package com.devilish.planwise.repository;
+package com.devilish.planwise.repository.goal;
 
 import com.devilish.planwise.entities.Goal;
 import org.springframework.data.domain.Page;
@@ -15,17 +15,17 @@ import java.util.Optional;
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, Long> {
     
-    Page<Goal> findByUserAndActiveTrueOrderByCreatedAtDesc(Long userId, Pageable pageable);
+    Page<Goal> findByUserIdAndActiveTrueOrderByCreatedAtDesc(Long userId, Pageable pageable);
     
-    List<Goal> findByUserAndActiveTrueOrderByCreatedAtDesc(Long userId);
+    List<Goal> findByUserIdAndActiveTrueOrderByCreatedAtDesc(Long userId);
     
-    List<Goal> findByUserAndStatusAndActiveTrueOrderByCreatedAtDesc(Long userId, Goal.GoalStatus status);
+    List<Goal> findByUserIdAndStatusAndActiveTrueOrderByCreatedAtDesc(Long userId, Goal.GoalStatus status);
     
-    List<Goal> findByUserAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(Long userId, 
-                                                                                      LocalDate date, 
-                                                                                      Goal.GoalStatus status);
+    List<Goal> findByUserIdAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(Long userId, 
+                                                                                         LocalDate date, 
+                                                                                         Goal.GoalStatus status);
     
-    Optional<Goal> findByIdAndUserAndActiveTrue(Long id, Long userId);
+    Optional<Goal> findByIdAndUserIdAndActiveTrue(Long id, Long userId);
     
     @Query("SELECT g FROM Goal g WHERE g.user.id = :userId AND g.active = true AND " +
            "(LOWER(g.description) LIKE LOWER(CONCAT('%', :search, '%')))")
@@ -35,5 +35,5 @@ public interface GoalRepository extends JpaRepository<Goal, Long> {
     @Query("SELECT COUNT(g) FROM Goal g WHERE g.user.id = :userId AND g.status = :status AND g.active = true")
     Long countByUserAndStatusAndActiveTrue(@Param("userId") Long userId, @Param("status") Goal.GoalStatus status);
     
-    long countByUserAndActiveTrue(Long userId);
+    long countByUserIdAndActiveTrue(Long userId);
 }

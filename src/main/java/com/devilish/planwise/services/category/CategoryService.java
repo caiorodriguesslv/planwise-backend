@@ -28,7 +28,7 @@ public class CategoryService {
         User currentUser = userService.getCurrentUserEntity();
         
         // Verificar se já existe categoria com o mesmo nome para o usuário
-        if (categoryRepository.existsByNameAndUserAndActiveTrue(request.getName(), currentUser.getId())) {
+        if (categoryRepository.existsByNameAndUserIdAndActiveTrue(request.getName(), currentUser.getId())) {
             throw new RuntimeException("Já existe uma categoria com este nome");
         }
 
@@ -45,13 +45,13 @@ public class CategoryService {
 
     public Page<CategoryResponse> getAllCategories(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
-        Page<Category> categories = categoryRepository.findByUserAndActiveTrueOrderByNameAsc(currentUser.getId(), pageable);
+        Page<Category> categories = categoryRepository.findByUserIdAndActiveTrueOrderByNameAsc(currentUser.getId(), pageable);
         return categories.map(CategoryResponse::fromCategory);
     }
 
     public List<CategoryResponse> getAllCategories() {
         User currentUser = userService.getCurrentUserEntity();
-        List<Category> categories = categoryRepository.findByUserAndActiveTrueOrderByNameAsc(currentUser.getId());
+        List<Category> categories = categoryRepository.findByUserIdAndActiveTrueOrderByNameAsc(currentUser.getId());
         return categories.stream()
                 .map(CategoryResponse::fromCategory)
                 .collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class CategoryService {
 
     public List<CategoryResponse> getCategoriesByType(Category.CategoryType type) {
         User currentUser = userService.getCurrentUserEntity();
-        List<Category> categories = categoryRepository.findByUserAndTypeAndActiveTrueOrderByNameAsc(currentUser.getId(), type);
+        List<Category> categories = categoryRepository.findByUserIdAndTypeAndActiveTrueOrderByNameAsc(currentUser.getId(), type);
         return categories.stream()
                 .map(CategoryResponse::fromCategory)
                 .collect(Collectors.toList());
@@ -67,7 +67,7 @@ public class CategoryService {
 
     public CategoryResponse getCategoryById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
         return CategoryResponse.fromCategory(category);
     }
@@ -75,12 +75,12 @@ public class CategoryService {
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         User currentUser = userService.getCurrentUserEntity();
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         // Verificar se já existe outra categoria com o mesmo nome
         if (!category.getName().equals(request.getName()) && 
-            categoryRepository.existsByNameAndUserAndActiveTrue(request.getName(), currentUser.getId())) {
+            categoryRepository.existsByNameAndUserIdAndActiveTrue(request.getName(), currentUser.getId())) {
             throw new RuntimeException("Já existe uma categoria com este nome");
         }
 
@@ -94,7 +94,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         // Soft delete

@@ -1,4 +1,4 @@
-package com.devilish.planwise.repository;
+package com.devilish.planwise.repository.expense;
 
 import com.devilish.planwise.entities.Expense;
 import org.springframework.data.domain.Page;
@@ -16,15 +16,15 @@ import java.util.Optional;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     
-    Page<Expense> findByUserAndActiveTrueOrderByDateDesc(Long userId, Pageable pageable);
+    Page<Expense> findByUserIdAndActiveTrueOrderByDateDesc(Long userId, Pageable pageable);
+
+    List<Expense> findByUserIdAndActiveTrueOrderByDateDesc(Long userId);
+
+    List<Expense> findByUserIdAndCategoryIdAndActiveTrueOrderByDateDesc(Long userId, Long categoryId);
+
+    List<Expense> findByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
     
-    List<Expense> findByUserAndActiveTrueOrderByDateDesc(Long userId);
-    
-    List<Expense> findByUserAndCategoryAndActiveTrueOrderByDateDesc(Long userId, Long categoryId);
-    
-    List<Expense> findByUserAndDateBetweenAndActiveTrueOrderByDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
-    
-    Optional<Expense> findByIdAndUserAndActiveTrue(Long id, Long userId);
+    Optional<Expense> findByIdAndUserIdAndActiveTrue(Long id, Long userId);
     
     @Query("SELECT SUM(e.value) FROM Expense e WHERE e.user.id = :userId AND e.active = true")
     BigDecimal getTotalExpenseByUser(@Param("userId") Long userId);
@@ -40,7 +40,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findByUserAndDescriptionContainingIgnoreCaseAndActiveTrue(@Param("userId") Long userId, 
                                                                             @Param("search") String search);
     
-    long countByUserAndActiveTrue(Long userId);
+    long countByUserIdAndActiveTrue(Long userId);
     
-    long countByUserAndDateBetweenAndActiveTrue(Long userId, LocalDate startDate, LocalDate endDate);
+    long countByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
 }

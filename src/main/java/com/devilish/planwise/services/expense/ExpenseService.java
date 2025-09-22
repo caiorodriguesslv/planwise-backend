@@ -33,7 +33,7 @@ public class ExpenseService {
         User currentUser = userService.getCurrentUserEntity();
         
         // Verificar se a categoria existe e pertence ao usuário
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(request.getCategoryId(), currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(request.getCategoryId(), currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         // Verificar se a categoria é do tipo DESPESA
@@ -56,13 +56,13 @@ public class ExpenseService {
 
     public Page<ExpenseResponse> getAllExpenses(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
-        Page<Expense> expenses = expenseRepository.findByUserAndActiveTrueOrderByDateDesc(currentUser.getId(), pageable);
+        Page<Expense> expenses = expenseRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId(), pageable);
         return expenses.map(ExpenseResponse::fromExpense);
     }
 
     public List<ExpenseResponse> getAllExpenses() {
         User currentUser = userService.getCurrentUserEntity();
-        List<Expense> expenses = expenseRepository.findByUserAndActiveTrueOrderByDateDesc(currentUser.getId());
+        List<Expense> expenses = expenseRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId());
         return expenses.stream()
                 .map(ExpenseResponse::fromExpense)
                 .collect(Collectors.toList());
@@ -70,7 +70,7 @@ public class ExpenseService {
 
     public List<ExpenseResponse> getExpensesByCategory(Long categoryId) {
         User currentUser = userService.getCurrentUserEntity();
-        List<Expense> expenses = expenseRepository.findByUserAndCategoryAndActiveTrueOrderByDateDesc(currentUser.getId(), categoryId);
+        List<Expense> expenses = expenseRepository.findByUserIdAndCategoryIdAndActiveTrueOrderByDateDesc(currentUser.getId(), categoryId);
         return expenses.stream()
                 .map(ExpenseResponse::fromExpense)
                 .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class ExpenseService {
 
     public List<ExpenseResponse> getExpensesByDateRange(LocalDate startDate, LocalDate endDate) {
         User currentUser = userService.getCurrentUserEntity();
-        List<Expense> expenses = expenseRepository.findByUserAndDateBetweenAndActiveTrueOrderByDateDesc(currentUser.getId(), startDate, endDate);
+        List<Expense> expenses = expenseRepository.findByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(currentUser.getId(), startDate, endDate);
         return expenses.stream()
                 .map(ExpenseResponse::fromExpense)
                 .collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class ExpenseService {
 
     public ExpenseResponse getExpenseById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Expense expense = expenseRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Expense expense = expenseRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Despesa não encontrada"));
         return ExpenseResponse.fromExpense(expense);
     }
@@ -94,11 +94,11 @@ public class ExpenseService {
     @Transactional
     public ExpenseResponse updateExpense(Long id, ExpenseRequest request) {
         User currentUser = userService.getCurrentUserEntity();
-        Expense expense = expenseRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Expense expense = expenseRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Despesa não encontrada"));
 
         // Verificar se a categoria existe e pertence ao usuário
-        Category category = categoryRepository.findByIdAndUserAndActiveTrue(request.getCategoryId(), currentUser.getId())
+        Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(request.getCategoryId(), currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         // Verificar se a categoria é do tipo DESPESA
@@ -118,7 +118,7 @@ public class ExpenseService {
     @Transactional
     public void deleteExpense(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Expense expense = expenseRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Expense expense = expenseRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Despesa não encontrada"));
 
         // Soft delete

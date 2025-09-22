@@ -1,4 +1,4 @@
-package com.devilish.planwise.dto;
+package com.devilish.planwise.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

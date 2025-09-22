@@ -1,4 +1,4 @@
-package com.devilish.planwise.repository;
+package com.devilish.planwise.repository.user;
 
 import com.devilish.planwise.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -45,13 +45,13 @@ public class GoalService {
 
     public Page<GoalResponse> getAllGoals(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
-        Page<Goal> goals = goalRepository.findByUserAndActiveTrueOrderByCreatedAtDesc(currentUser.getId(), pageable);
+        Page<Goal> goals = goalRepository.findByUserIdAndActiveTrueOrderByCreatedAtDesc(currentUser.getId(), pageable);
         return goals.map(GoalResponse::fromGoal);
     }
 
     public List<GoalResponse> getAllGoals() {
         User currentUser = userService.getCurrentUserEntity();
-        List<Goal> goals = goalRepository.findByUserAndActiveTrueOrderByCreatedAtDesc(currentUser.getId());
+        List<Goal> goals = goalRepository.findByUserIdAndActiveTrueOrderByCreatedAtDesc(currentUser.getId());
         return goals.stream()
                 .map(GoalResponse::fromGoal)
                 .collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class GoalService {
 
     public List<GoalResponse> getGoalsByStatus(Goal.GoalStatus status) {
         User currentUser = userService.getCurrentUserEntity();
-        List<Goal> goals = goalRepository.findByUserAndStatusAndActiveTrueOrderByCreatedAtDesc(currentUser.getId(), status);
+        List<Goal> goals = goalRepository.findByUserIdAndStatusAndActiveTrueOrderByCreatedAtDesc(currentUser.getId(), status);
         return goals.stream()
                 .map(GoalResponse::fromGoal)
                 .collect(Collectors.toList());
@@ -67,7 +67,7 @@ public class GoalService {
 
     public List<GoalResponse> getExpiredGoals() {
         User currentUser = userService.getCurrentUserEntity();
-        List<Goal> goals = goalRepository.findByUserAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(
+        List<Goal> goals = goalRepository.findByUserIdAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(
                 currentUser.getId(), LocalDate.now(), Goal.GoalStatus.ATINGIDA);
         return goals.stream()
                 .map(GoalResponse::fromGoal)
@@ -76,7 +76,7 @@ public class GoalService {
 
     public GoalResponse getGoalById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Goal goal = goalRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Goal goal = goalRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Meta não encontrada"));
         return GoalResponse.fromGoal(goal);
     }
@@ -84,7 +84,7 @@ public class GoalService {
     @Transactional
     public GoalResponse updateGoal(Long id, GoalRequest request) {
         User currentUser = userService.getCurrentUserEntity();
-        Goal goal = goalRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Goal goal = goalRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Meta não encontrada"));
 
         goal.setDescription(request.getDescription());
@@ -101,7 +101,7 @@ public class GoalService {
     @Transactional
     public GoalResponse updateGoalProgress(Long id, BigDecimal newCurrentValue) {
         User currentUser = userService.getCurrentUserEntity();
-        Goal goal = goalRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Goal goal = goalRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Meta não encontrada"));
 
         goal.setCurrentValue(newCurrentValue);
@@ -114,7 +114,7 @@ public class GoalService {
     @Transactional
     public GoalResponse addToGoalProgress(Long id, BigDecimal amount) {
         User currentUser = userService.getCurrentUserEntity();
-        Goal goal = goalRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Goal goal = goalRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Meta não encontrada"));
 
         BigDecimal newCurrentValue = goal.getCurrentValue().add(amount);
@@ -128,7 +128,7 @@ public class GoalService {
     @Transactional
     public void deleteGoal(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Goal goal = goalRepository.findByIdAndUserAndActiveTrue(id, currentUser.getId())
+        Goal goal = goalRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Meta não encontrada"));
 
         // Soft delete
@@ -152,7 +152,7 @@ public class GoalService {
     @Transactional
     public void updateExpiredGoals() {
         User currentUser = userService.getCurrentUserEntity();
-        List<Goal> expiredGoals = goalRepository.findByUserAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(
+        List<Goal> expiredGoals = goalRepository.findByUserIdAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(
                 currentUser.getId(), LocalDate.now(), Goal.GoalStatus.ATINGIDA);
 
         for (Goal goal : expiredGoals) {

@@ -29,8 +29,8 @@ public class ReportService {
         BigDecimal totalExpense = expenseRepository.getTotalExpenseByUser(userId);
         
         // Contar transações
-        long incomeCount = incomeRepository.countByUserAndActiveTrue(userId);
-        long expenseCount = expenseRepository.countByUserAndActiveTrue(userId);
+        long incomeCount = incomeRepository.countByUserIdAndActiveTrue(userId);
+        long expenseCount = expenseRepository.countByUserIdAndActiveTrue(userId);
         
         return FinancialSummaryResponse.of(
             totalIncome != null ? totalIncome : BigDecimal.ZERO,
@@ -49,8 +49,8 @@ public class ReportService {
         BigDecimal totalExpense = expenseRepository.getTotalExpenseByUserAndDateRange(userId, startDate, endDate);
         
         // Contar transações no período
-        long incomeCount = incomeRepository.countByUserAndDateBetweenAndActiveTrue(userId, startDate, endDate);
-        long expenseCount = expenseRepository.countByUserAndDateBetweenAndActiveTrue(userId, startDate, endDate);
+        long incomeCount = incomeRepository.countByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(userId, startDate, endDate);
+        long expenseCount = expenseRepository.countByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(userId, startDate, endDate);
         
         return FinancialSummaryResponse.of(
             totalIncome != null ? totalIncome : BigDecimal.ZERO,
@@ -68,7 +68,7 @@ public class ReportService {
         Map<String, Object> summary = new HashMap<>();
         
         // Contar metas por status
-        summary.put("totalGoals", goalRepository.countByUserAndActiveTrue(userId));
+        summary.put("totalGoals", goalRepository.countByUserIdAndActiveTrue(userId));
         summary.put("goalsInProgress", goalRepository.countByUserAndStatusAndActiveTrue(userId, com.devilish.planwise.entities.Goal.GoalStatus.EM_ANDAMENTO));
         summary.put("goalsAchieved", goalRepository.countByUserAndStatusAndActiveTrue(userId, com.devilish.planwise.entities.Goal.GoalStatus.ATINGIDA));
         summary.put("goalsExpired", goalRepository.countByUserAndStatusAndActiveTrue(userId, com.devilish.planwise.entities.Goal.GoalStatus.VENCIDA));
