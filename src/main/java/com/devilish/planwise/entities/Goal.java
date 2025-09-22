@@ -66,12 +66,12 @@ public class Goal {
     }
 
     // Método para calcular o progresso da meta
-    public BigDecimal getProgressPercentage() {
-        if (targetValue.compareTo(BigDecimal.ZERO) == 0) {
-            return BigDecimal.ZERO;
+    public Double getProgressPercentage() {
+        if (targetValue == null || targetValue.compareTo(BigDecimal.ZERO) == 0) {
+            return 0.0;
         }
-        return currentValue.divide(targetValue, 4, BigDecimal.ROUND_HALF_UP)
-                .multiply(BigDecimal.valueOf(100));
+        return currentValue.divide(targetValue, 4, java.math.RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100)).doubleValue();
     }
 
     // Método para verificar se a meta foi atingida
