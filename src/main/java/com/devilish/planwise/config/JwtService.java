@@ -21,7 +21,11 @@ public class JwtService {
     private Dotenv dotenv;
 
     private String getSecretKey() {
-        return dotenv.get("JWT_SECRET");
+        String secret = dotenv.get("JWT_SECRET");
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET não foi configurado no arquivo .env");
+        }
+        return secret;
     }
 
     private long getJwtExpiration() {
