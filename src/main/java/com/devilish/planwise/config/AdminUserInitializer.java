@@ -42,12 +42,10 @@ public class AdminUserInitializer implements CommandLineRunner {
             
             userRepository.save(admin);
             
-            log.info("✅ Usuário administrador padrão criado: {}", adminEmail);
             if (adminPassword.equals("admin123")) {
-                log.warn("⚠️  IMPORTANTE: Você está usando a senha padrão! Configure ADMIN_PASSWORD no .env");
+                // IMPORTANTE: Você está usando a senha padrão! Configure ADMIN_PASSWORD no .env
             }
         } else {
-            log.info("ℹ️  Usuário administrador já existe: {}", adminEmail);
         }
     }
 }

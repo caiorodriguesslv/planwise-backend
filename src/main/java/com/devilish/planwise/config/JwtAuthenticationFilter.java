@@ -62,7 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             // Token inválido ou malformado - continuar sem autenticação
-            log.debug("Token JWT inválido: " + e.getMessage());
         }
         filterChain.doFilter(request, response);
     }
