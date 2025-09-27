@@ -54,12 +54,14 @@ public class ExpenseService {
         return ExpenseResponse.fromExpense(savedExpense);
     }
 
+    @Transactional(readOnly = true)
     public Page<ExpenseResponse> getAllExpenses(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
         Page<Expense> expenses = expenseRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId(), pageable);
         return expenses.map(ExpenseResponse::fromExpense);
     }
 
+    @Transactional(readOnly = true)
     public List<ExpenseResponse> getAllExpenses() {
         User currentUser = userService.getCurrentUserEntity();
         List<Expense> expenses = expenseRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId());
