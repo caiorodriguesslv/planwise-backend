@@ -26,6 +26,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     
     Optional<Expense> findByIdAndUserIdAndActiveTrue(Long id, Long userId);
     
+    @Query("SELECT e FROM Expense e JOIN FETCH e.category c WHERE e.id = :id AND e.user.id = :userId AND e.active = true")
+    Optional<Expense> findByIdAndUserIdAndActiveTrueWithCategory(@Param("id") Long id, @Param("userId") Long userId);
+    
     @Query("SELECT SUM(e.value) FROM Expense e WHERE e.user.id = :userId AND e.active = true")
     BigDecimal getTotalExpenseByUser(@Param("userId") Long userId);
     

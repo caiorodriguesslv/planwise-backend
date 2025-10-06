@@ -52,7 +52,6 @@ public class ExpenseController {
             List<ExpenseResponse> expenses = expenseService.getAllExpenses();
             return ResponseEntity.ok(expenses);
         } catch (Exception e) {
-
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Error-Message", "Erro interno: " + e.getMessage())
                     .build();
@@ -153,4 +152,5 @@ public class ExpenseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }

@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,10 +87,15 @@ public class ExpenseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public ExpenseResponse getExpenseById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
-        Expense expense = expenseRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("Despesa não encontrada"));
+        Optional<Expense> expenseOptional = expenseRepository.findByIdAndUserIdAndActiveTrueWithCategory(id, currentUser.getId());
+        if (expenseOptional.isEmpty()) {
+            throw new RuntimeException("Despesa não encontrada");
+        }
+        
+        Expense expense = expenseOptional.get();
         return ExpenseResponse.fromExpense(expense);
     }
 
@@ -145,4 +151,5 @@ public class ExpenseService {
         User currentUser = userService.getCurrentUserEntity();
         return expenseRepository.getTotalExpenseByUserAndDateRange(currentUser.getId(), startDate, endDate);
     }
+
 }

@@ -52,7 +52,7 @@ public class Expense {
     private User user;
 
     // Relacionamento com Category
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }
