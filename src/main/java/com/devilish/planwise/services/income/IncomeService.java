@@ -54,36 +54,49 @@ public class IncomeService {
         return IncomeResponse.fromIncome(savedIncome);
     }
 
+    @Transactional(readOnly = true)
     public Page<IncomeResponse> getAllIncomes(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
         Page<Income> incomes = incomeRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId(), pageable);
+        // Força o carregamento da categoria antes de converter para DTO
+        incomes.forEach(income -> income.getCategory().getName());
         return incomes.map(IncomeResponse::fromIncome);
     }
 
+    @Transactional(readOnly = true)
     public List<IncomeResponse> getAllIncomes() {
         User currentUser = userService.getCurrentUserEntity();
         List<Income> incomes = incomeRepository.findByUserIdAndActiveTrueOrderByDateDesc(currentUser.getId());
+        // Força o carregamento da categoria antes de converter para DTO
+        incomes.forEach(income -> income.getCategory().getName());
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<IncomeResponse> getIncomesByCategory(Long categoryId) {
         User currentUser = userService.getCurrentUserEntity();
         List<Income> incomes = incomeRepository.findByUserIdAndCategoryIdAndActiveTrueOrderByDateDesc(currentUser.getId(), categoryId);
+        // Força o carregamento da categoria antes de converter para DTO
+        incomes.forEach(income -> income.getCategory().getName());
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<IncomeResponse> getIncomesByDateRange(LocalDate startDate, LocalDate endDate) {
         User currentUser = userService.getCurrentUserEntity();
         List<Income> incomes = incomeRepository.findByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(currentUser.getId(), startDate, endDate);
+        // Força o carregamento da categoria antes de converter para DTO
+        incomes.forEach(income -> income.getCategory().getName());
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public IncomeResponse getIncomeById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
         Income income = incomeRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
@@ -126,19 +139,24 @@ public class IncomeService {
         incomeRepository.save(income);
     }
 
+    @Transactional(readOnly = true)
     public List<IncomeResponse> searchIncomes(String search) {
         User currentUser = userService.getCurrentUserEntity();
         List<Income> incomes = incomeRepository.findByUserAndDescriptionContainingIgnoreCaseAndActiveTrue(currentUser.getId(), search);
+        // Força o carregamento da categoria antes de converter para DTO
+        incomes.forEach(income -> income.getCategory().getName());
         return incomes.stream()
                 .map(IncomeResponse::fromIncome)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public BigDecimal getTotalIncome() {
         User currentUser = userService.getCurrentUserEntity();
         return incomeRepository.getTotalIncomeByUser(currentUser.getId());
     }
 
+    @Transactional(readOnly = true)
     public BigDecimal getTotalIncomeByDateRange(LocalDate startDate, LocalDate endDate) {
         User currentUser = userService.getCurrentUserEntity();
         return incomeRepository.getTotalIncomeByUserAndDateRange(currentUser.getId(), startDate, endDate);

@@ -2,7 +2,10 @@ package com.devilish.planwise.controllers.income;
 
 import com.devilish.planwise.dto.income.IncomeRequest;
 import com.devilish.planwise.dto.income.IncomeResponse;
+import com.devilish.planwise.entities.User;
+import com.devilish.planwise.repository.income.IncomeRepository;
 import com.devilish.planwise.services.income.IncomeService;
+import com.devilish.planwise.services.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,8 @@ import java.util.List;
 public class IncomeController {
 
     private final IncomeService incomeService;
+    private final UserService userService;
+    private final IncomeRepository incomeRepository;
 
     @PostMapping
     public ResponseEntity<IncomeResponse> createIncome(@Valid @RequestBody IncomeRequest request) {
@@ -40,6 +45,7 @@ public class IncomeController {
             Page<IncomeResponse> incomes = incomeService.getAllIncomes(pageable);
             return ResponseEntity.ok(incomes);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -146,6 +152,30 @@ public class IncomeController {
             return ResponseEntity.ok(total);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> getIncomeStats() {
+        try {
+            User currentUser = userService.getCurrentUserEntity();
+            BigDecimal total = incomeService.getTotalIncome();
+            long count = incomeRepository.countByUserIdAndActiveTrue(currentUser.getId());
+            BigDecimal average = count > 0 ? total.divide(BigDecimal.valueOf(count), 2, java.math.RoundingMode.HALF_UP) : BigDecimal.ZERO;
+            
+            return ResponseEntity.ok(java.util.Map.of(
+                "total", total != null ? total : BigDecimal.ZERO,
+                "count", count,
+                "average", average
+            ));
+        } catch (Exception e) {
+            System.err.println("❌ ERRO ao buscar estatísticas: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.ok(java.util.Map.of(
+                "total", BigDecimal.ZERO,
+                "count", 0,
+                "average", BigDecimal.ZERO
+            ));
         }
     }
 }

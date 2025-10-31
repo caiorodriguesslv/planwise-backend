@@ -71,6 +71,7 @@ public class ExpenseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ExpenseResponse> getExpensesByCategory(Long categoryId) {
         User currentUser = userService.getCurrentUserEntity();
         List<Expense> expenses = expenseRepository.findByUserIdAndCategoryIdAndActiveTrueOrderByDateDesc(currentUser.getId(), categoryId);
@@ -79,6 +80,7 @@ public class ExpenseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ExpenseResponse> getExpensesByDateRange(LocalDate startDate, LocalDate endDate) {
         User currentUser = userService.getCurrentUserEntity();
         List<Expense> expenses = expenseRepository.findByUserIdAndDateBetweenAndActiveTrueOrderByDateDesc(currentUser.getId(), startDate, endDate);
@@ -134,6 +136,7 @@ public class ExpenseService {
         expenseRepository.save(expense);
     }
 
+    @Transactional(readOnly = true)
     public List<ExpenseResponse> searchExpenses(String search) {
         User currentUser = userService.getCurrentUserEntity();
         List<Expense> expenses = expenseRepository.findByUserAndDescriptionContainingIgnoreCaseAndActiveTrue(currentUser.getId(), search);
@@ -142,11 +145,13 @@ public class ExpenseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public BigDecimal getTotalExpense() {
         User currentUser = userService.getCurrentUserEntity();
         return expenseRepository.getTotalExpenseByUser(currentUser.getId());
     }
 
+    @Transactional(readOnly = true)
     public BigDecimal getTotalExpenseByDateRange(LocalDate startDate, LocalDate endDate) {
         User currentUser = userService.getCurrentUserEntity();
         return expenseRepository.getTotalExpenseByUserAndDateRange(currentUser.getId(), startDate, endDate);

@@ -7,6 +7,7 @@ import com.devilish.planwise.repository.goal.GoalRepository;
 import com.devilish.planwise.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class ReportService {
     private final GoalRepository goalRepository;
     private final UserService userService;
 
+    @Transactional(readOnly = true)
     public FinancialSummaryResponse getFinancialSummary() {
         Long userId = userService.getCurrentUserEntity().getId();
         
@@ -42,6 +44,7 @@ public class ReportService {
         );
     }
 
+    @Transactional(readOnly = true)
     public FinancialSummaryResponse getFinancialSummaryByDateRange(LocalDate startDate, LocalDate endDate) {
         Long userId = userService.getCurrentUserEntity().getId();
         
@@ -62,6 +65,7 @@ public class ReportService {
         );
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> getGoalsSummary() {
         Long userId = userService.getCurrentUserEntity().getId();
         
@@ -76,6 +80,7 @@ public class ReportService {
         return summary;
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> getMonthlySummary(int year, int month) {
         Long userId = userService.getCurrentUserEntity().getId();
         
@@ -98,6 +103,7 @@ public class ReportService {
         return summary;
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> getYearlySummary(int year) {
         Long userId = userService.getCurrentUserEntity().getId();
         

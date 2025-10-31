@@ -43,12 +43,14 @@ public class GoalService {
         return GoalResponse.fromGoal(savedGoal);
     }
 
+    @Transactional(readOnly = true)
     public Page<GoalResponse> getAllGoals(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
         Page<Goal> goals = goalRepository.findByUserIdAndActiveTrueOrderByCreatedAtDesc(currentUser.getId(), pageable);
         return goals.map(GoalResponse::fromGoal);
     }
 
+    @Transactional(readOnly = true)
     public List<GoalResponse> getAllGoals() {
         User currentUser = userService.getCurrentUserEntity();
         List<Goal> goals = goalRepository.findByUserIdAndActiveTrueOrderByCreatedAtDesc(currentUser.getId());
@@ -57,6 +59,7 @@ public class GoalService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<GoalResponse> getGoalsByStatus(Goal.GoalStatus status) {
         User currentUser = userService.getCurrentUserEntity();
         List<Goal> goals = goalRepository.findByUserIdAndStatusAndActiveTrueOrderByCreatedAtDesc(currentUser.getId(), status);
@@ -65,6 +68,7 @@ public class GoalService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<GoalResponse> getExpiredGoals() {
         User currentUser = userService.getCurrentUserEntity();
         List<Goal> goals = goalRepository.findByUserIdAndDeadlineBeforeAndStatusNotAndActiveTrueOrderByDeadlineAsc(
@@ -74,6 +78,7 @@ public class GoalService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public GoalResponse getGoalById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
         Goal goal = goalRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
@@ -136,6 +141,7 @@ public class GoalService {
         goalRepository.save(goal);
     }
 
+    @Transactional(readOnly = true)
     public List<GoalResponse> searchGoals(String search) {
         User currentUser = userService.getCurrentUserEntity();
         List<Goal> goals = goalRepository.findByUserAndDescriptionContainingIgnoreCaseAndActiveTrue(currentUser.getId(), search);
@@ -144,6 +150,7 @@ public class GoalService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Long getGoalsCountByStatus(Goal.GoalStatus status) {
         User currentUser = userService.getCurrentUserEntity();
         return goalRepository.countByUserAndStatusAndActiveTrue(currentUser.getId(), status);

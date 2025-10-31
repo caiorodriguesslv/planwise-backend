@@ -2,7 +2,10 @@ package com.devilish.planwise.controllers.expense;
 
 import com.devilish.planwise.dto.expense.ExpenseRequest;
 import com.devilish.planwise.dto.expense.ExpenseResponse;
+import com.devilish.planwise.entities.User;
+import com.devilish.planwise.repository.expense.ExpenseRepository;
 import com.devilish.planwise.services.expense.ExpenseService;
+import com.devilish.planwise.services.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,8 @@ import java.util.List;
 public class ExpenseController {
 
     private final ExpenseService expenseService;
+    private final UserService userService;
+    private final ExpenseRepository expenseRepository;
 
     @PostMapping
     public ResponseEntity<ExpenseResponse> createExpense(@Valid @RequestBody ExpenseRequest request) {
@@ -150,6 +155,30 @@ public class ExpenseController {
             return ResponseEntity.ok(total);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> getExpenseStats() {
+        try {
+            User currentUser = userService.getCurrentUserEntity();
+            BigDecimal total = expenseService.getTotalExpense();
+            long count = expenseRepository.countByUserIdAndActiveTrue(currentUser.getId());
+            BigDecimal average = count > 0 ? total.divide(BigDecimal.valueOf(count), 2, java.math.RoundingMode.HALF_UP) : BigDecimal.ZERO;
+            
+            return ResponseEntity.ok(java.util.Map.of(
+                "total", total != null ? total : BigDecimal.ZERO,
+                "count", count,
+                "average", average
+            ));
+        } catch (Exception e) {
+            log.error("❌ ERRO ao buscar estatísticas de despesas: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.ok(java.util.Map.of(
+                "total", BigDecimal.ZERO,
+                "count", 0,
+                "average", BigDecimal.ZERO
+            ));
         }
     }
 

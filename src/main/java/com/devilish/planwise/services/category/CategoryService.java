@@ -43,12 +43,14 @@ public class CategoryService {
         return CategoryResponse.fromCategory(savedCategory);
     }
 
+    @Transactional(readOnly = true)
     public Page<CategoryResponse> getAllCategories(Pageable pageable) {
         User currentUser = userService.getCurrentUserEntity();
         Page<Category> categories = categoryRepository.findByUserIdAndActiveTrueOrderByNameAsc(currentUser.getId(), pageable);
         return categories.map(CategoryResponse::fromCategory);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         User currentUser = userService.getCurrentUserEntity();
         List<Category> categories = categoryRepository.findByUserIdAndActiveTrueOrderByNameAsc(currentUser.getId());
@@ -57,6 +59,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> getCategoriesByType(Category.CategoryType type) {
         User currentUser = userService.getCurrentUserEntity();
         List<Category> categories = categoryRepository.findByUserIdAndTypeAndActiveTrueOrderByNameAsc(currentUser.getId(), type);
@@ -65,6 +68,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public CategoryResponse getCategoryById(Long id) {
         User currentUser = userService.getCurrentUserEntity();
         Category category = categoryRepository.findByIdAndUserIdAndActiveTrue(id, currentUser.getId())
@@ -102,6 +106,7 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> searchCategories(String search) {
         User currentUser = userService.getCurrentUserEntity();
         List<Category> categories = categoryRepository.findByUserAndNameContainingIgnoreCaseAndActiveTrue(currentUser.getId(), search);
